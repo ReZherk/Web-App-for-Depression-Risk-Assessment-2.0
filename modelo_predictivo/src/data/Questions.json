@@ -1,0 +1,38 @@
+[
+{
+"id":1,
+"pregunta":"¿Ha tenido poco interés o placer en hacer cosas?"
+},
+{
+ "id":2,
+ "pregunta":"¿Se ha sentido deprimido(a), decaído(a) o sin esperanzas?"
+ },
+ {
+  "id":3,
+  "pregunta":"¿Ha tenido dificultad para dormir o ha dormido demasiado?"
+  },
+  {
+   "id":4,
+   "pregunta":"¿Se ha sentido cansado(a) o con poca energía?"
+   },
+   {
+    "id":5,
+    "pregunta":"¿Ha tenido poco apetito o ha comido en exceso?"
+   },
+   {
+    "id":6,
+    "pregunta":"¿Se ha sentido mal consigo mismo(a) o ha sentido que es un fracaso?"
+   },
+   {
+    "id":7,
+    "pregunta":"¿Ha tenido dificultad para concentrarse en cosas, como leer el periódico o ver televisión?"
+   },
+   {
+    "id":8,
+    "pregunta":"¿Se ha movido o hablado más lento de lo normal, o ha estado inquieto(a)?"
+   },
+   {
+    "id":9,
+    "pregunta":"¿Ha tenido pensamientos de que estaría mejor muerto(a) o de hacerse daño?"
+   }
+]

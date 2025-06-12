@@ -1,0 +1,17 @@
+
+# Frontend (React)
+modelo_predictivo/node_modules/
+modelo_predictivo/.env
+modelo_predictivo/dist/
+
+# Backend (Flask)
+modelo_predictivo(backend)/.venv/
+modelo_predictivo(backend)/__pycache__/
+modelo_predictivo(backend)/.env
+*.pyc
+*.pyo
+*.pyd
+
+# General
+.DS_Store
+.env
