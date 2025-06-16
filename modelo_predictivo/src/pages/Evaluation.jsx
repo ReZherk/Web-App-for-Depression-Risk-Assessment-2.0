@@ -2,11 +2,14 @@ import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
 import { MonthlyEvaluationItem } from "../components/organismos/MonthlyEvaluationItem"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export function Evaluation() {
+  const navigate = useNavigate();
+
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
   const [savedEvaluations, setSavedEvaluations] = useState({})
-  const handleSave = (month, answers) => {
+  const updateSaves = (month, answers) => {
     setSavedEvaluations((prev) => {
       const updatedEvaluations = {
         ...prev,
@@ -17,7 +20,30 @@ export function Evaluation() {
 
       return updatedEvaluations;
     });
+    handleSave(month, answers)
   };
+
+  const handleSave = async (month, answers) => {
+
+    const formData = {
+      username: "testuser",
+      month: month,
+      responses: answers
+    }
+    const res = await fetch('http://localhost:5000/api/evaluation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    console.log("Respuesta del servidor:", res)
+    if (res.ok) {
+      alert("Datos guardados exitosamente");
+      navigate('/home');
+    } else {
+      alert("Error:No se guardo el cuestionario");
+    }
+  }
 
   return (
     <EvaluationContainer>
@@ -42,7 +68,7 @@ export function Evaluation() {
               <MonthlyEvaluationItem
                 key={month}
                 month={month}
-                onSave={handleSave}
+                onSave={updateSaves}
                 saved={savedEvaluations[month]}
 
               />

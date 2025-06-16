@@ -5,62 +5,64 @@ import Questions from '../../data/Questions.json';
 
 
 export const MonthlyEvaluationItem = ({ month, onSave, saved }) => {
- const [started, setStarted] = useState(false)
- const [completed, setCompleted] = useState(saved || false) // Si ya está guardado, comienza como completado
- const answersRef = useRef([]);
+  const [started, setStarted] = useState(false)
+  const [completed, setCompleted] = useState(saved || false) // Si ya está guardado, comienza como completado
 
- const handleStart = () => {
-  setStarted(true)
- }
+  // Hook useRef que crea una referencia mutable para almacenar respuestas sin provocar re-renderizados
+  const answersRef = useRef([]);
 
- const handleComplete = () => {
-  setCompleted(true)
-  onSave(month, answersRef.current)
-  window.scrollTo({ top: 0, behavior: "smooth" });
- }
+  const handleStart = () => {
+    setStarted(true)
+  }
 
- return (
-  <EvaluationItem>
-   <EvaluationTitle>Evaluación de {month}</EvaluationTitle>
+  const handleComplete = () => {
+    setCompleted(true)
+    onSave(month, answersRef.current)
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-   {completed ? (
-    <p>✅ Evaluación guardada.</p>
-   ) : !started ? (
-    <>
-     <EvaluationDescription>
-      Mide tu bienestar emocional correspondiente al mes de {month}
-     </EvaluationDescription>
-     <StartButton onClick={handleStart}>Iniciar la evaluación</StartButton>
-    </>
-   ) : (
-    <>
-     <EvaluationDescription>
-      ¿Listo para comenzar la evaluación de {month}? Haz clic en "Completar" cuando hayas terminado.
-      {Questions.map((q) => (
-       <QuizQuestion
-        key={q.id}
-        question={q.pregunta}
-        options={[
-         { label: 'Nunca', value: 0 },
-         { label: 'A veces', value: 1 },
-         { label: 'A menudo', value: 2 },
-         { label: 'Siempre', value: 3 }
-        ]}
-        onAnswer={(valorSeleccionado) => {
-         answersRef.current.push(valorSeleccionado);
-         console.log("Valor de esta pregunta:", valorSeleccionado)
-        }
-        }
-       />
-      ))}
-     </EvaluationDescription>
+  return (
+    <EvaluationItem>
+      <EvaluationTitle>Evaluación de {month}</EvaluationTitle>
 
-     <StartButton onClick={handleComplete}>Completar Evaluación</StartButton>
-    </>
-   )}
+      {completed ? (
+        <p>✅ Evaluación guardada.</p>
+      ) : !started ? (
+        <>
+          <EvaluationDescription>
+            Mide tu bienestar emocional correspondiente al mes de {month}
+          </EvaluationDescription>
+          <StartButton onClick={handleStart}>Iniciar la evaluación</StartButton>
+        </>
+      ) : (
+        <>
+          <EvaluationDescription>
+            ¿Listo para comenzar la evaluación de {month}? Haz clic en "Completar" cuando hayas terminado.
+            {Questions.map((q) => (
+              <QuizQuestion
+                key={q.id}
+                question={q.pregunta}
+                options={[
+                  { label: 'Nunca', value: 0 },
+                  { label: 'A veces', value: 1 },
+                  { label: 'A menudo', value: 2 },
+                  { label: 'Siempre', value: 3 }
+                ]}
+                onAnswer={(valorSeleccionado) => {
+                  answersRef.current.push(valorSeleccionado);
+                  console.log("Valor de esta pregunta:", valorSeleccionado)
+                }
+                }
+              />
+            ))}
+          </EvaluationDescription>
 
-  </EvaluationItem>
- )
+          <StartButton onClick={handleComplete}>Completar Evaluación</StartButton>
+        </>
+      )}
+
+    </EvaluationItem>
+  )
 }
 
 
