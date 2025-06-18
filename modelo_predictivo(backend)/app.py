@@ -59,6 +59,16 @@ def evaluation():
 
     return jsonify(success=True, message="Respuestas guardadas correctamente")
 
+@app.route('/api/evaluation/<username>/<month>', methods=['GET'])
+def get_evaluation(username,month):
+    conn=get_connection()
+    cursor=conn.cursor()
+
+
+    cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
+    user = cursor.fetchone()
+
+
 
 if __name__=='__main__':
     app.run(debug=True,port=5000) #El servidor Flask se ejecutará en el puerto 5000 y con el modo de depuración activado.
