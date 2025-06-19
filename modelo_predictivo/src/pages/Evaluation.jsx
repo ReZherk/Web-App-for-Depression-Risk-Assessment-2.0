@@ -51,29 +51,41 @@ export function Evaluation() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const results = {};
-      const username = "testuser"
-      for (const month of months) {
-        const res = await fetch(`http://localhost:5000/api/evaluation/${username}/${month}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+      const username = "testuser";
+
+      try {
+        const responses = await Promise.all(
+          months.map(async (month) => {
+            try {
+              const res = await fetch(`http://localhost:5000/api/evaluation/${username}/${month}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+              });
+              const data = await res.json();
+              console.log(`La respuesta del mes ${month} es`, data.success);
+              return { month, success: data.success };
+            } catch (error) {
+              console.error(`Error procesando JSON de ${month}`, error);
+              return { month, success: false };
+            }
+          })
+        );
+
+        const results = {};
+        responses.forEach(({ month, success }) => {
+          results[month] = success;
         });
 
-        try {
-          const data = await res.json();
-          console.log("La respuesta del mes", month, "es", data.success);
-          results[month] = data.success;
-        } catch (err) {
-          console.error("Error procesando JSON de", month, err);
-          results[month] = false;
-        }
+        setQuestionSaved(results);
+      } catch (err) {
+        console.error("Error al obtener evaluaciones:", err);
       }
-      setQuestionSaved(results);
     };
 
     fetchAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   return (
     <EvaluationContainer>
@@ -99,7 +111,7 @@ export function Evaluation() {
                 key={month}
                 month={month}
                 onSave={handleSave}
-                saved={questionSaved[month] || false}
+                saved={questionSaved[month]}
 
               />
             ))}

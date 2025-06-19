@@ -30,7 +30,9 @@ export const MonthlyEvaluationItem = ({ month, onSave, saved }) => {
     <EvaluationItem>
       <EvaluationTitle>Evaluación de {month}</EvaluationTitle>
 
-      {completed ? (
+      {saved === undefined ? (
+        <p>Cargando estado de la evaluación...</p>
+      ) : completed ? (
         <p>✅ Evaluación guardada.</p>
       ) : !started ? (
         <>
