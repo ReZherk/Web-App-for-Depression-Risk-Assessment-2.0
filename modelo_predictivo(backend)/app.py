@@ -68,7 +68,26 @@ def get_evaluation(username,month):
     cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
     user = cursor.fetchone()
 
+    if not user:
+        cursor.close()
+        conn.close()
+        return jsonify(success=False,message="Usuario no encontrado"),404
+    
+    user_id=user[0]
 
+    cursor.execute("""SELECT responses FROM monthly_responses 
+        WHERE user_id = %s AND month = %s""", (user_id, month))
+    
+    result=cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if result:
+        responses=json.loads(result[0])
+        return jsonify(success=True,responses=responses)
+    else:
+        return jsonify(success=False,message="Sin respuestas registradas")
 
 if __name__=='__main__':
     app.run(debug=True,port=5000) #El servidor Flask se ejecutará en el puerto 5000 y con el modo de depuración activado.

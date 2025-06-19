@@ -1,14 +1,15 @@
 import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
 import { MonthlyEvaluationItem } from "../components/organismos/MonthlyEvaluationItem"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function Evaluation() {
   const navigate = useNavigate();
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-  const [savedEvaluations, setSavedEvaluations] = useState({})
+  {/* const [savedEvaluations, setSavedEvaluations] = useState({})
+
   const updateSaves = (month, answers) => {
     setSavedEvaluations((prev) => {
       const updatedEvaluations = {
@@ -16,12 +17,13 @@ export function Evaluation() {
         [month]: { completed: true, responses: answers }
       };
 
-      console.log(updatedEvaluations); // Ahora muestra la versión actualizada
+      console.log(updatedEvaluations);
 
       return updatedEvaluations;
     });
     handleSave(month, answers)
   };
+ */}
 
   const handleSave = async (month, answers) => {
 
@@ -44,6 +46,34 @@ export function Evaluation() {
       alert("Error:No se guardo el cuestionario");
     }
   }
+
+  const [questionSaved, setQuestionSaved] = useState({});
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      const results = {};
+      const username = "testuser"
+      for (const month of months) {
+        const res = await fetch(`http://localhost:5000/api/evaluation/${username}/${month}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        try {
+          const data = await res.json();
+          console.log("La respuesta del mes", month, "es", data.success);
+          results[month] = data.success;
+        } catch (err) {
+          console.error("Error procesando JSON de", month, err);
+          results[month] = false;
+        }
+      }
+      setQuestionSaved(results);
+    };
+
+    fetchAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <EvaluationContainer>
@@ -68,8 +98,8 @@ export function Evaluation() {
               <MonthlyEvaluationItem
                 key={month}
                 month={month}
-                onSave={updateSaves}
-                saved={savedEvaluations[month]}
+                onSave={handleSave}
+                saved={questionSaved[month] || false}
 
               />
             ))}

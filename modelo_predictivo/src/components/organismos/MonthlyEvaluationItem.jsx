@@ -1,12 +1,17 @@
 import styled from 'styled-components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { QuizQuestion } from '../moleculas/QuizQuestion';
 import Questions from '../../data/Questions.json';
 
 
+
 export const MonthlyEvaluationItem = ({ month, onSave, saved }) => {
   const [started, setStarted] = useState(false)
-  const [completed, setCompleted] = useState(saved || false) // Si ya está guardado, comienza como completado
+  const [completed, setCompleted] = useState(saved)
+
+  useEffect(() => {
+    setCompleted(saved);
+  }, [saved]);
 
   // Hook useRef que crea una referencia mutable para almacenar respuestas sin provocar re-renderizados
   const answersRef = useRef([]);
