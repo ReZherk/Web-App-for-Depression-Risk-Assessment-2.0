@@ -54,6 +54,7 @@ export function Evaluation() {
       const username = "testuser";
 
       try {
+        //Promise.all() pone en paralelo todas las promesas,devuelve un array con todas resuletas.
         const responses = await Promise.all(
           months.map(async (month) => {
             try {
