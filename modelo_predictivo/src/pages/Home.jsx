@@ -3,14 +3,16 @@ import { DashboardTemplate } from "../components/templates/DashboardTemplate"
 import { MoodSelector } from "../components/moleculas/MoodSelector"
 import { ContentCard } from "../components/moleculas/ContentCard"
 import cerebro from "../assets/cerebro.svg"
+import { useUser } from "../context/useUser"
 
 export function Home() {
+  const { user } = useUser()
   const handleMoodSelect = (moodId) => {
     console.log("Mood seleccionado:", moodId)
   }
 
   return (
-    <DashboardTemplate title="BIENVENIDO MARIO ARMAS">
+    <DashboardTemplate title={`BIENVENIDO ${user.nombre.toUpperCase()}`}>
       <WelcomeMessage>¡Nos alegra acompañarte nuevamente!</WelcomeMessage>
 
       <MoodSelector onSelect={handleMoodSelect} />

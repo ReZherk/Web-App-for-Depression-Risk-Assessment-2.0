@@ -13,13 +13,17 @@ def login():
 
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+    cursor.execute("SELECT username, nombre_completo FROM users WHERE username=%s AND password=%s", (username, password))
     user = cursor.fetchone()
     cursor.close()
     conn.close()
     
     if user:
-        return jsonify(success=True,message="Login exitoso")#Metodo que convierte un objeto de Python en una respuesta JSON.
+        information={
+            "username":user[0],
+            "nombre_completo":user[1]
+        }
+        return jsonify(success=True,data=information)#Metodo que convierte un objeto de Python en una respuesta JSON.
     else:
         return jsonify(success=False,message="Credenciales incorrectas"), 401
 @app.route('/api/evaluation',methods=['POST'])

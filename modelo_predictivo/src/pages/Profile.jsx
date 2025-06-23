@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useState } from "react"
 import { FaBars, FaBell } from "react-icons/fa"
-import profile from "../assets/profile.svg";
+
 
 export function Profile() {
   const [formData, setFormData] = useState({
@@ -41,7 +41,7 @@ export function Profile() {
       <ProfileContent>
         <ProfileImageSection>
           <ProfileImage
-            src={profile}
+            src={'https://i.pinimg.com/236x/a8/da/22/a8da222be70a71e7858bf752065d5cc3.jpg'}
             alt="Foto de perfil"
           />
         </ProfileImageSection>

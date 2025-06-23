@@ -7,7 +7,10 @@ import { Button } from "../atomos/Button"
 import { Text } from "../atomos/Typography"
 import { Icon } from "../atomos/Icon"
 
+
 export const LoginForm = ({ onSubmit, className }) => {
+
+
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     username: "",
@@ -43,7 +46,7 @@ export const LoginForm = ({ onSubmit, className }) => {
           type="text"
           placeholder="Documento de identidad"
           name="username"
-          value={formData.documento}
+          value={formData.username}
           onChange={handleChange}
           icon={<Icon name="user" size="small" />}
           required

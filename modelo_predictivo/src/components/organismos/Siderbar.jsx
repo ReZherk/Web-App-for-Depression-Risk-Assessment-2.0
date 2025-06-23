@@ -2,8 +2,10 @@ import styled from "styled-components"
 import { NavItem } from "../moleculas/NavItem"
 import { Avatar } from "../atomos/Avatar"
 import cerebro from "../../assets/cerebro.svg"
+import { useUser } from "../../context/useUser"
 
 export function Sidebar() {
+  const { user } = useUser()
   const navItems = [
     { to: "/home", icon: "home", label: "INICIO" },
     { to: "/perfil", icon: "user", label: "PERFIL" },
@@ -21,11 +23,11 @@ export function Sidebar() {
 
       <UserInfo>
         <Avatar
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-e0OrIjAJrfy8IWMdYlsb2LupD2Egw6.png"
+          src="https://i.pinimg.com/236x/a8/da/22/a8da222be70a71e7858bf752065d5cc3.jpg"
           alt="Avatar"
           size="large"
         />
-        <UserName>MARIO ARMAS</UserName>
+        <UserName>{user.nombre.toUpperCase()}</UserName>
       </UserInfo>
 
       <NavMenu>
