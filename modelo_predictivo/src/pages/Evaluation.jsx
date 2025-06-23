@@ -62,6 +62,7 @@ export function Evaluation() {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
               });
+
               const data = await res.json();
               console.log(`La respuesta del mes ${month} es`, data.success);
               return { month, success: data.success };

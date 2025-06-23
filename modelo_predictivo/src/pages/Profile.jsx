@@ -1,15 +1,72 @@
 import styled from "styled-components"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaBars, FaBell } from "react-icons/fa"
+import { useUser } from "../context/useUser"
 
 
 export function Profile() {
+  const { user } = useUser()
   const [formData, setFormData] = useState({
-    nombres: "",
-    apellidos: "",
+    nom_apell: "",
     codigo: "",
     facultad: "",
-  })
+  });
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      const username = user.username;
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/datos/${username}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!res.ok) {
+          console.error("Error al obtener datos:", data.message);
+          return;
+        }
+
+        const data = await res.json();
+        console.log("La respuesta del json es: ", data);
+
+        const results = {
+          nom_apell: data.responses.nom_apell,
+          codigo: data.responses.codigo,
+          facultad: data.responses.facultad,
+        };
+
+        setFormData(results);
+      } catch (err) {
+        console.error("Error al obtener evaluaciones:", err);
+      }
+
+    };
+    fetchAll();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`http://localhost:5000/api/datos_actualizados/${user.username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Datos actualizados exitosamente.");
+      } else {
+        alert("Error al actualizar: " + data.message);
+      }
+    } catch (err) {
+      console.error("Error al actualizar datos:", err);
+      alert("Ocurrió un error inesperado.");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -17,12 +74,6 @@ export function Profile() {
       ...formData,
       [name]: value,
     })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Datos del perfil:", formData)
-    // Aquí iría la lógica para guardar los datos
   }
 
   return (
@@ -49,29 +100,15 @@ export function Profile() {
         <ProfileForm onSubmit={handleSubmit}>
           <FormRow>
             <FormGroup>
-              <FormLabel>Nombres</FormLabel>
+              <FormLabel>Nombres y Apellidos</FormLabel>
               <FormInput
                 type="text"
-                name="nombres"
-                placeholder="Ingresa tus nombres"
-                value={formData.nombres}
+                name="nom_apell"
+                placeholder="Ingresa tus nuevo nombre"
+                value={formData.nom_apell}
                 onChange={handleChange}
               />
             </FormGroup>
-
-            <FormGroup>
-              <FormLabel>Apellidos</FormLabel>
-              <FormInput
-                type="text"
-                name="apellidos"
-                placeholder="Ingresa tus apellidos"
-                value={formData.apellidos}
-                onChange={handleChange}
-              />
-            </FormGroup>
-          </FormRow>
-
-          <FormRow>
             <FormGroup>
               <FormLabel>Código de estudiante</FormLabel>
               <FormInput
@@ -82,6 +119,10 @@ export function Profile() {
                 onChange={handleChange}
               />
             </FormGroup>
+
+          </FormRow>
+
+          <FormRow>
 
             <FormGroup>
               <FormLabel>Facultad del estudiante</FormLabel>
