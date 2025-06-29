@@ -8,19 +8,27 @@ import { Profile } from './pages/Profile';
 import { Login } from './pages/Login';
 import { Welcome } from './pages/Welcome';
 import { Evaluation } from './pages/Evaluation';
+import { useUser } from './context/useUser'
+import { Results } from './pages/Results'
 
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { setUser } = useUser();
 
   const handleLogin = () => {
     setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
   }
   return (
     <AppContainer>
       <GlobalStyles />
       <BrowserRouter>
-        {isAuthenticated && <Sidebar />}
+        {isAuthenticated && <Sidebar onLogout={handleLogout} />}
 
         <Routes>
 
@@ -30,7 +38,7 @@ function App() {
           <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
           <Route path="/perfil" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
           <Route path='/evaluacion' element={isAuthenticated ? <Evaluation /> : <Navigate to="/login" />} />
-
+          <Route path='/resultados' element={isAuthenticated ? <Results /> : <Navigate to="/login" />} />
 
           {/* Ruta por defecto */}
           <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/welcome"} />} />

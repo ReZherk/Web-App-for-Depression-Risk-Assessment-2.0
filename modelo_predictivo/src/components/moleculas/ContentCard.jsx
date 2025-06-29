@@ -3,12 +3,12 @@ import { Card, CardHeader, CardContent } from "../atomos/Card";
 
 
 export const ContentCard = ({ title, children, className }) => {
- return (
-  <StyledContentCard className={className}>
-   <StyledCardHeader>{title}</StyledCardHeader>
-   <StyledCardContent>{children}</StyledCardContent>
-  </StyledContentCard>
- )
+  return (
+    <StyledContentCard className={className}>
+      <StyledCardHeader>{title}</StyledCardHeader>
+      <StyledCardContent>{children}</StyledCardContent>
+    </StyledContentCard>
+  )
 }
 
 

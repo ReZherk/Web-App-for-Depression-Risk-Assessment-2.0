@@ -1,40 +1,42 @@
 import styled from "styled-components";
 
-import { FaHome, FaUser, FaClipboardList, FaChartLine, FaBars, FaBell, FaEye, FaEyeSlash, FaCheck } from "react-icons/fa";
+import { FaHome, FaUser, FaClipboardList, FaChartLine, FaBars, FaBell, FaEye, FaEyeSlash, FaCheck, FaSignOutAlt } from "react-icons/fa";
 
 
 export const Icon = ({ name, size = "medium", color = "black", className }) => {
- const getIcon = () => {
+  const getIcon = () => {
 
-  switch (name) {
-   case "home":
-    return <FaHome />
-   case "user":
-    return <FaUser />
-   case "clipboard":
-    return <FaClipboardList />
-   case "chart":
-    return <FaChartLine />
-   case "menu":
-    return <FaBars />
-   case "bell":
-    return <FaBell />
-   case "eye":
-    return <FaEye />
-   case "eye-slash":
-    return <FaEyeSlash />
-   case "check":
-    return <FaCheck />
-   default:
-    return null
+    switch (name) {
+      case "home":
+        return <FaHome />
+      case "user":
+        return <FaUser />
+      case "clipboard":
+        return <FaClipboardList />
+      case "chart":
+        return <FaChartLine />
+      case "menu":
+        return <FaBars />
+      case "bell":
+        return <FaBell />
+      case "eye":
+        return <FaEye />
+      case "eye-slash":
+        return <FaEyeSlash />
+      case "check":
+        return <FaCheck />
+      case "log-out":
+        return <FaSignOutAlt />
+      default:
+        return null
 
+    }
   }
- }
- return (
-  <StyledIcon size={size} color={color} className={className}>
-   {getIcon()}
-  </StyledIcon>
- )
+  return (
+    <StyledIcon size={size} color={color} className={className}>
+      {getIcon()}
+    </StyledIcon>
+  )
 
 }
 

@@ -3,9 +3,18 @@ import { NavItem } from "../moleculas/NavItem"
 import { Avatar } from "../atomos/Avatar"
 import cerebro from "../../assets/cerebro.svg"
 import { useUser } from "../../context/useUser"
+import { useNavigate } from "react-router-dom"
+import { Icon } from "../atomos/Icon"
 
-export function Sidebar() {
-  const { user } = useUser()
+export function Sidebar({ onLogout }) {
+  const { user } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+    navigate("/welcome");
+  }
+
   const navItems = [
     { to: "/home", icon: "home", label: "INICIO" },
     { to: "/perfil", icon: "user", label: "PERFIL" },
@@ -34,6 +43,11 @@ export function Sidebar() {
         {navItems.map((item) => (
           <NavItem key={item.to} to={item.to} icon={item.icon} label={item.label} />
         ))}
+
+        <LogoutButton onClick={handleLogout}>
+          <Icon name="log-out" />
+          <NavLabel>CERRAR SESION</NavLabel>
+        </LogoutButton>
       </NavMenu>
     </SidebarContainer>
   )
@@ -92,4 +106,28 @@ const NavMenu = styled.ul`
   padding: 0;
   margin: 0;
   width: 100%;
+`
+const LogoutButton = styled.button`
+  all: unset;/* - Elimina completamente estilos por defecto del navegador y también 
+  cualquier estilo aplicado anteriormente*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    color: #e74c3c;
+  }
+`;
+
+
+const NavLabel = styled.span`
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-top: 5px;
 `
