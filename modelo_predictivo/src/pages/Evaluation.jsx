@@ -3,8 +3,11 @@ import { FaBars, FaBell } from "react-icons/fa"
 import { MonthlyEvaluationItem } from "../components/organismos/MonthlyEvaluationItem"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useUser } from '../context/useUser'
 
 export function Evaluation() {
+
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -28,7 +31,7 @@ export function Evaluation() {
   const handleSave = async (month, answers) => {
 
     const formData = {
-      username: "testuser",
+      username: user.username,
       month: month,
       responses: answers
     }
@@ -51,7 +54,7 @@ export function Evaluation() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const username = "testuser";
+      const username = user.username;
 
       try {
         //Promise.all() pone en paralelo todas las promesas,devuelve un array con todas resuletas.
