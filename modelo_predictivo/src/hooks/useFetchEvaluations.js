@@ -18,7 +18,12 @@ export function useFetchEvaluations(username, months) {
               );
 
               const data = await res.json();
-              return { month, success: data.success };
+              return {
+                month,
+                success: data.success,
+                responses: data.responses,
+                results: data.results,
+              };
             } catch (error) {
               console.error(`Error procesando JSON de ${month}`, error);
               return { month, success: false };
@@ -26,12 +31,16 @@ export function useFetchEvaluations(username, months) {
           })
         );
 
-        const results = {};
-        responses.forEach(({ month, success }) => {
-          results[month] = success;
+        const deliver = {};
+        responses.forEach(({ month, success, responses, results }) => {
+          deliver[month] = {
+            completed: success,
+            responses,
+            results,
+          };
         });
 
-        setQuestionSaved(results);
+        setQuestionSaved(deliver);
       } catch (err) {
         console.error("Error al obtener evaluaciones:", err);
       }

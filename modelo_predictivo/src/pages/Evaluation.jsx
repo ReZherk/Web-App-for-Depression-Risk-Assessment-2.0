@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
 import { MonthlyEvaluationItem } from "../components/organismos/MonthlyEvaluationItem"
 import { useNavigate } from "react-router-dom"
+import { useMemo } from "react";
 import { useUser } from '../context/useUser'
 import { useFetchEvaluations } from '../hooks/useFetchEvaluations'
 
@@ -10,7 +11,11 @@ export function Evaluation() {
   const { user } = useUser();
   const navigate = useNavigate();
 
-  const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+  //useMemo:Esto hace que React memorice la referencia de ese array, manteniéndola estable durante toda la vida del componente.
+  const months = useMemo(() => [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ], []);
 
   const questionSaved = useFetchEvaluations(user.username, months);
 
@@ -60,7 +65,7 @@ export function Evaluation() {
                 key={month}
                 month={month}
                 onSave={handleSave}
-                saved={questionSaved[month]}
+                saved={questionSaved[month]?.completed}
 
               />
             ))}

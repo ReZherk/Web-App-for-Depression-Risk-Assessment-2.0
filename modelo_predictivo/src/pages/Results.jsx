@@ -1,76 +1,69 @@
 import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
+import { useMemo, useState } from 'react'
+import { useUser } from '../context/useUser'
+import { useFetchEvaluations } from '../hooks/useFetchEvaluations'
+import { EvaluationDetails } from '../components/organismos/EvaluationDetails'
 
 export function Results() {
- return (
-  <ResultsContainer>
-   <Header>
-    <MenuButton>
-     <FaBars />
-    </MenuButton>
-    <NotificationButton>
-     <FaBell />
-    </NotificationButton>
-   </Header>
+  const { user } = useUser();
+  const [selectedEvaluation, setSelectedEvaluation] = useState(null);
+  const months = useMemo(() => [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ], []);
 
-   <PageTitle>RESULTADOS</PageTitle>
+  const questionSaved = useFetchEvaluations(user.username, months);
 
-   <ContentCard>
-    <CardTitle>Resultados de Evaluaciones</CardTitle>
-    <CardContent>
-     <p>Aquí puedes ver los resultados de tus evaluaciones recientes.</p>
+  return (
+    <ResultsContainer>
+      <Header>
+        <MenuButton>
+          <FaBars />
+        </MenuButton>
+        <NotificationButton>
+          <FaBell />
+        </NotificationButton>
+      </Header>
 
-     <ResultsList>
-      <ResultItem>
-       <ResultHeader>
-        <ResultTitle>Test de Ansiedad</ResultTitle>
-        <ResultDate>15/05/2025</ResultDate>
-       </ResultHeader>
-       <ResultScore>
-        <ScoreLabel>Puntuación:</ScoreLabel>
-        <ScoreValue>28/50</ScoreValue>
-       </ResultScore>
-       <ResultDescription>
-        Tu nivel de ansiedad es moderado. Recomendamos técnicas de respiración y meditación.
-       </ResultDescription>
-       <ViewDetailsButton>Ver Detalles</ViewDetailsButton>
-      </ResultItem>
+      <PageTitle>RESULTADOS</PageTitle>
 
-      <ResultItem>
-       <ResultHeader>
-        <ResultTitle>Test de Estrés</ResultTitle>
-        <ResultDate>10/05/2025</ResultDate>
-       </ResultHeader>
-       <ResultScore>
-        <ScoreLabel>Puntuación:</ScoreLabel>
-        <ScoreValue>15/40</ScoreValue>
-       </ResultScore>
-       <ResultDescription>
-        Tu nivel de estrés es bajo. Continúa con tus actividades habituales.
-       </ResultDescription>
-       <ViewDetailsButton>Ver Detalles</ViewDetailsButton>
-      </ResultItem>
+      <ContentCard>
+        <CardTitle>Resultados de Evaluaciones</CardTitle>
+        <CardContent>
+          <p>Aquí puedes ver los resultados de tus evaluaciones recientes.</p>
 
-      <ResultItem>
-       <ResultHeader>
-        <ResultTitle>Evaluación de Bienestar General</ResultTitle>
-        <ResultDate>01/05/2025</ResultDate>
-       </ResultHeader>
-       <ResultScore>
-        <ScoreLabel>Puntuación:</ScoreLabel>
-        <ScoreValue>75/100</ScoreValue>
-       </ResultScore>
-       <ResultDescription>
-        Tu bienestar general es bueno. Recomendamos mantener hábitos saludables.
-       </ResultDescription>
-       <ViewDetailsButton>Ver Detalles</ViewDetailsButton>
-      </ResultItem>
-     </ResultsList>
-    </CardContent>
-   </ContentCard>
-  </ResultsContainer>
- )
+          <ResultsList>
+            {months.map((month) => {
+              const evaluation = questionSaved[month];
+
+              return (
+                <ResultItem key={month}>
+                  <ResultHeader>
+                    <ResultTitle>{`Test de ansiedad de ${month}`}</ResultTitle>
+                    <ResultDate>15/05/2025</ResultDate>
+                  </ResultHeader>
+
+                  <ViewDetailsButton onClick={() => setSelectedEvaluation(evaluation)}>
+                    Ver Detalles
+                  </ViewDetailsButton>
+                </ResultItem>
+              );
+            })}
+          </ResultsList>
+        </CardContent>
+      </ContentCard>
+
+      {selectedEvaluation && (
+        <EvaluationDetails
+          data={selectedEvaluation}
+          onClose={() => setSelectedEvaluation(null)}
+        />
+      )}
+    </ResultsContainer>
+  );
 }
+
 
 const ResultsContainer = styled.div`
   padding: 20px;
