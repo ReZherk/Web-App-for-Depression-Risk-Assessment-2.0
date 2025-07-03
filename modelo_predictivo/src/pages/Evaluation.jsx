@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
 import { MonthlyEvaluationItem } from "../components/organismos/MonthlyEvaluationItem"
-import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUser } from '../context/useUser'
+import { useFetchEvaluations } from '../hooks/useFetchEvaluations'
 
 export function Evaluation() {
 
@@ -11,22 +11,8 @@ export function Evaluation() {
   const navigate = useNavigate();
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-  {/* const [savedEvaluations, setSavedEvaluations] = useState({})
 
-  const updateSaves = (month, answers) => {
-    setSavedEvaluations((prev) => {
-      const updatedEvaluations = {
-        ...prev,
-        [month]: { completed: true, responses: answers }
-      };
-
-      console.log(updatedEvaluations);
-
-      return updatedEvaluations;
-    });
-    handleSave(month, answers)
-  };
- */}
+  const questionSaved = useFetchEvaluations(user.username, months);
 
   const handleSave = async (month, answers) => {
 
@@ -49,48 +35,6 @@ export function Evaluation() {
       alert("Error:No se guardo el cuestionario");
     }
   }
-
-  const [questionSaved, setQuestionSaved] = useState({});
-
-  useEffect(() => {
-    const fetchAll = async () => {
-      const username = user.username;
-
-      try {
-        //Promise.all() pone en paralelo todas las promesas,devuelve un array con todas resuletas.
-        const responses = await Promise.all(
-          months.map(async (month) => {
-            try {
-              const res = await fetch(`http://localhost:5000/api/evaluation/${username}/${month}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-              });
-
-              const data = await res.json();
-              console.log(`La respuesta del mes ${month} es`, data.success);
-              return { month, success: data.success };
-            } catch (error) {
-              console.error(`Error procesando JSON de ${month}`, error);
-              return { month, success: false };
-            }
-          })
-        );
-
-        const results = {};
-        responses.forEach(({ month, success }) => {
-          results[month] = success;
-        });
-
-        setQuestionSaved(results);
-      } catch (err) {
-        console.error("Error al obtener evaluaciones:", err);
-      }
-    };
-
-    fetchAll();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
 
   return (
     <EvaluationContainer>
