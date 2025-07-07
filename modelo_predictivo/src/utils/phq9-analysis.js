@@ -1,5 +1,4 @@
-// phq9-analysis.js
-
+// Analizar el progreso histórico del usuario
 export function analyzeProgress(monthlyData) {
   const completedEntries = Object.entries(monthlyData)
     .filter(

@@ -1,5 +1,4 @@
-// phq9-prediction.js
-
+// Predecir el porcentaje esperado para el próximo mes
 export function predictNextMonth(monthlyData) {
   const completedMonths = Object.entries(monthlyData)
     .filter(

@@ -1,93 +1,78 @@
+"use client"
+
 import styled from "styled-components"
 import { FaBars, FaBell } from "react-icons/fa"
+import { useMemo, useState } from "react"
+import { useUser } from "../context/useUser"
+import { useFetchEvaluations } from "../hooks/useFetchEvaluations"
+import { MetricsDashboard } from "../components/moleculas/MetricsDashboard"
+import { ComparisonModal } from "../components/organismos/ComparisonModal"
+import { analyzeProgress } from "../utils/phq9-analysis"
+import { predictNextMonth } from '../utils/phq9-prediction'
 
 export function Progress() {
- return (
-  <ProgressContainer>
-   <Header>
-    <MenuButton>
-     <FaBars />
-    </MenuButton>
-    <NotificationButton>
-     <FaBell />
-    </NotificationButton>
-   </Header>
+  const { user } = useUser()
+  const [showComparison, setShowComparison] = useState(false)
 
-   <PageTitle>PROGRESO</PageTitle>
+  const months = useMemo(
+    () => [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ],
+    [],
+  )
 
-   <ContentGrid>
-    <ContentCard>
-     <CardTitle>Progreso de Bienestar</CardTitle>
-     <CardContent>
-      <ChartPlaceholder>
-       <p>Gráfico de progreso de bienestar</p>
-      </ChartPlaceholder>
-      <ChartDescription>Tu bienestar ha mejorado un 15% en los últimos 30 días.</ChartDescription>
-     </CardContent>
-    </ContentCard>
+  const questionSaved = useFetchEvaluations(user.username, months)
 
-    <ContentCard>
-     <CardTitle>Registro de Emociones</CardTitle>
-     <CardContent>
-      <ChartPlaceholder>
-       <p>Gráfico de emociones registradas</p>
-      </ChartPlaceholder>
-      <ChartDescription>Has registrado principalmente emociones positivas en la última semana.</ChartDescription>
-     </CardContent>
-    </ContentCard>
+  // Calcular métricas de progreso
+  const progressData = useMemo(() => {
+    return analyzeProgress(questionSaved)
+  }, [questionSaved])
 
-    <ContentCard>
-     <CardTitle>Objetivos de Bienestar</CardTitle>
-     <CardContent>
-      <GoalsList>
-       <GoalItem completed={true}>
-        <GoalCheckbox checked={true} readOnly />
-        <GoalText>Completar evaluación inicial</GoalText>
-       </GoalItem>
-       <GoalItem completed={true}>
-        <GoalCheckbox checked={true} readOnly />
-        <GoalText>Registrar emociones por 7 días consecutivos</GoalText>
-       </GoalItem>
-       <GoalItem completed={false}>
-        <GoalCheckbox checked={false} readOnly />
-        <GoalText>Completar módulo de manejo de estrés</GoalText>
-       </GoalItem>
-       <GoalItem completed={false}>
-        <GoalCheckbox checked={false} readOnly />
-        <GoalText>Participar en una sesión de grupo</GoalText>
-       </GoalItem>
-      </GoalsList>
-     </CardContent>
-    </ContentCard>
+  // Calcular predicción próximo mes
+  const prediction = useMemo(() => {
+    return predictNextMonth(questionSaved)
+  }, [questionSaved])
 
-    <ContentCard>
-     <CardTitle>Recomendaciones</CardTitle>
-     <CardContent>
-      <RecommendationsList>
-       <RecommendationItem>
-        <RecommendationTitle>Técnicas de respiración</RecommendationTitle>
-        <RecommendationDescription>
-         Practica ejercicios de respiración profunda durante 5 minutos al día.
-        </RecommendationDescription>
-       </RecommendationItem>
-       <RecommendationItem>
-        <RecommendationTitle>Actividad física</RecommendationTitle>
-        <RecommendationDescription>
-         Realiza al menos 30 minutos de actividad física moderada 3 veces por semana.
-        </RecommendationDescription>
-       </RecommendationItem>
-       <RecommendationItem>
-        <RecommendationTitle>Descanso</RecommendationTitle>
-        <RecommendationDescription>
-         Procura dormir entre 7-8 horas diarias para mejorar tu bienestar.
-        </RecommendationDescription>
-       </RecommendationItem>
-      </RecommendationsList>
-     </CardContent>
-    </ContentCard>
-   </ContentGrid>
-  </ProgressContainer>
- )
+  return (
+    <ProgressContainer>
+      <Header>
+        <MenuButton>
+          <FaBars />
+        </MenuButton>
+        <NotificationButton>
+          <FaBell />
+        </NotificationButton>
+      </Header>
+
+      <PageTitle>PROGRESO</PageTitle>
+
+      <MainContent>
+        <MetricsDashboard progressData={progressData} prediction={prediction} />
+
+        <ActionsSection>
+          <ComparisonButton onClick={() => setShowComparison(true)}>🔍 Comparar IA vs Manual</ComparisonButton>
+        </ActionsSection>
+      </MainContent>
+
+      <ComparisonModal
+        isOpen={showComparison}
+        onClose={() => setShowComparison(false)}
+        monthlyData={questionSaved}
+        months={months}
+      />
+    </ProgressContainer>
+  )
 }
 
 const ProgressContainer = styled.div`
@@ -127,95 +112,35 @@ const PageTitle = styled.h1`
   margin-bottom: 30px;
 `
 
-const ContentGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 `
 
-const ContentCard = styled.div`
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+const ActionsSection = styled.div`
+  display: flex;
+  justify-content: center;
 `
 
-const CardTitle = styled.div`
-  background-color: #0A3D62;
+const ComparisonButton = styled.button`
+  background: linear-gradient(135deg, #0A3D62 0%, #1e5f8b 100%);
   color: white;
-  padding: 15px;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
   font-size: 16px;
   font-weight: 600;
-`
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
+  transition: all 0.3s ease;
 
-const CardContent = styled.div`
-  padding: 20px;
-`
-
-const ChartPlaceholder = styled.div`
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  
-  p {
-    color: #888;
-    font-size: 14px;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 61, 98, 0.4);
   }
-`
 
-const ChartDescription = styled.p`
-  font-size: 14px;
-  color: #555;
-  margin: 0;
-`
-
-const GoalsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`
-
-const GoalItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: ${(props) => (props.completed ? 1 : 0.7)};
-`
-
-const GoalCheckbox = styled.input.attrs({ type: "checkbox" })`
-  width: 18px;
-  height: 18px;
-  accent-color: #0A3D62;
-`
-
-const GoalText = styled.span`
-  font-size: 14px;
-  color: #555;
-`
-
-const RecommendationsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`
-
-const RecommendationItem = styled.div`
-  border-left: 3px solid #0A3D62;
-  padding-left: 10px;
-`
-
-const RecommendationTitle = styled.h4`
-  font-size: 14px;
-  color: #0A3D62;
-  margin: 0 0 5px 0;
-`
-
-const RecommendationDescription = styled.p`
-  font-size: 13px;
-  color: #666;
-  margin: 0;
+  &:active {
+    transform: translateY(0);
+  }
 `
