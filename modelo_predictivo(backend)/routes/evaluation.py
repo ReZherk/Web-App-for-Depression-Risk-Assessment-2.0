@@ -97,7 +97,7 @@ def get_evaluation(username, month):
         
         user_id = user[0]
 
-        # Obtener respuestas y resultados
+        
         cursor.execute("""
             SELECT responses, results FROM monthly_responses 
             WHERE user_id = %s AND month = %s

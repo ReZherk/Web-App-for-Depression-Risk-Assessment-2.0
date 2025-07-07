@@ -97,7 +97,7 @@ class DepressionPredictor:
             }
         
         try:
-            # Convertir a numpy array
+         
             nuevos_datos = np.array([responses_array])
             
             # Escalar los datos

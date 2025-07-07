@@ -10,6 +10,7 @@ import { Welcome } from './pages/Welcome';
 import { Evaluation } from './pages/Evaluation';
 import { useUser } from './context/useUser'
 import { Results } from './pages/Results'
+import { Progress } from './pages/Progress'
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/perfil" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
           <Route path='/evaluacion' element={isAuthenticated ? <Evaluation /> : <Navigate to="/login" />} />
           <Route path='/resultados' element={isAuthenticated ? <Results /> : <Navigate to="/login" />} />
+          <Route path='/progreso' element={isAuthenticated ? <Progress /> : <Navigate to="/login" />} />
 
           {/* Ruta por defecto */}
           <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/welcome"} />} />
