@@ -123,3 +123,4 @@ def get_evaluation(username, month):
     finally:
         cursor.close()
         conn.close()
+
