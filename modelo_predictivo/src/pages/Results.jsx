@@ -19,7 +19,7 @@ export function Results() {
     <ResultsContainer>
       <Header>
         <MenuButton>
-          <FaBars />
+
         </MenuButton>
         <NotificationButton>
           <FaBell />
