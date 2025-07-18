@@ -1,7 +1,6 @@
 "use client"
 
 import styled from "styled-components"
-import { FaBars, FaBell } from "react-icons/fa"
 import { useMemo, useState } from "react"
 import { useUser } from "../context/useUser"
 import { useFetchEvaluations } from "../hooks/useFetchEvaluations"
