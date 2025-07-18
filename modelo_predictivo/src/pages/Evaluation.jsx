@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom"
 import { useMemo } from "react";
 import { useUser } from '../context/useUser'
 import { useFetchEvaluations } from '../hooks/useFetchEvaluations'
+import { useNotification } from '../context/useNotification'
 
 export function Evaluation() {
 
+  const { setHasNewEvaluation } = useNotification();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ export function Evaluation() {
 
     console.log("Respuesta del servidor:", res)
     if (res.ok) {
+      setHasNewEvaluation(true);
       alert("Datos guardados exitosamente");
       navigate('/home');
     } else {
