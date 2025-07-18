@@ -1,31 +1,27 @@
 import styled from "styled-components"
-import { FaBars, FaBell } from "react-icons/fa"
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useUser } from '../context/useUser'
 import { useFetchEvaluations } from '../hooks/useFetchEvaluations'
 import { EvaluationDetails } from '../components/organismos/EvaluationDetails'
+import { useNotification } from '../context/useNotification'
+import { HeaderWithNotification } from '../components/moleculas/HeaderWithNotification'
 
 export function Results() {
   const { user } = useUser();
+  const { setHasNewEvaluation } = useNotification();
   const [selectedEvaluation, setSelectedEvaluation] = useState(null);
   const months = useMemo(() => [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ], []);
-
+  useEffect(() => {
+    setHasNewEvaluation(false);
+  }, [setHasNewEvaluation])
   const questionSaved = useFetchEvaluations(user.username, months);
 
   return (
     <ResultsContainer>
-      <Header>
-        <MenuButton>
-
-        </MenuButton>
-        <NotificationButton>
-          <FaBell />
-        </NotificationButton>
-      </Header>
-
+      <HeaderWithNotification />
       <PageTitle>RESULTADOS</PageTitle>
 
       <ContentCard>
@@ -72,30 +68,6 @@ const ResultsContainer = styled.div`
   min-height: 100vh;
   color: #333;
 `
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`
-
-const MenuButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #0A3D62;
-`
-
-const NotificationButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #0A3D62;
-`
-
 const PageTitle = styled.h1`
   font-size: 24px;
   color: #0A3D62;
@@ -162,28 +134,10 @@ const ResultDate = styled.span`
   color: #888;
 `
 
-const ResultScore = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-`
-
 const ScoreLabel = styled.span`
   font-size: 14px;
   color: #555;
   margin-right: 5px;
-`
-
-const ScoreValue = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  color: #0A3D62;
-`
-
-const ResultDescription = styled.p`
-  font-size: 14px;
-  color: #666;
-  margin: 0 0 15px 0;
 `
 
 const ViewDetailsButton = styled.button`

@@ -9,6 +9,7 @@ import { MetricsDashboard } from "../components/moleculas/MetricsDashboard"
 import { ComparisonModal } from "../components/organismos/ComparisonModal"
 import { analyzeProgress } from "../utils/phq9-analysis"
 import { predictNextMonth } from '../utils/phq9-prediction'
+import { HeaderWithNotification } from '../components/moleculas/HeaderWithNotification'
 
 export function Progress() {
   const { user } = useUser()
@@ -46,15 +47,7 @@ export function Progress() {
 
   return (
     <ProgressContainer>
-      <Header>
-        <MenuButton>
-          <FaBars />
-        </MenuButton>
-        <NotificationButton>
-          <FaBell />
-        </NotificationButton>
-      </Header>
-
+      <HeaderWithNotification />
       <PageTitle>PROGRESO</PageTitle>
 
       <MainContent>
@@ -81,29 +74,6 @@ const ProgressContainer = styled.div`
   background-color: #AFD9F6;
   min-height: 100vh;
   color: #333;
-`
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`
-
-const MenuButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #0A3D62;
-`
-
-const NotificationButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #0A3D62;
 `
 
 const PageTitle = styled.h1`

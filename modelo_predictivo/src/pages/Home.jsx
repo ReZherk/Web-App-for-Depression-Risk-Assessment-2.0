@@ -6,6 +6,8 @@ import { useUser } from "../context/useUser"
 import { useState, useEffect } from 'react'
 import Phrases from '../data/Phrases.json'
 
+
+
 export function Home() {
   const [reproducir, setReproducir] = useState(false);
   const [fraseDelDia, setFraseDelDia] = useState('');

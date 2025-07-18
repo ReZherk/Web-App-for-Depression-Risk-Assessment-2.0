@@ -11,10 +11,10 @@ export function HeaderWithNotification() {
  return (
   <Header>
    <MenuButton>
-    <FaBars />
+
    </MenuButton>
 
-   <NotificationWrapper onClick={() => navigate("/results")}>
+   <NotificationWrapper onClick={() => navigate("/resultados")}>
     <FaBell />
     {hasNewEvaluation && <NotificationDot />}
    </NotificationWrapper>
